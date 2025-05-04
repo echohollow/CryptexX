@@ -1,4 +1,4 @@
-# 🚀 CryptexX v2.1 — Stateless ATP Payload Encrypter
+# 🚀 CryptexX — Stateless ATP Payload Encrypter
 
 > **Built for adversarial automation. No locks. No limits. No barriers.**
 
@@ -6,7 +6,7 @@
 
 ## 🧬 Purpose
 
-CryptexX v2.1 is a dual-layer encryption utility for payloads, optimized for red team deployment, autonomous dropper chains, and malware-as-a-service (MaaS) systems.
+CryptexX is a dual-layer encryption utility for payloads, optimized for red team deployment, autonomous dropper chains, and malware-as-a-service (MaaS) systems.
 
 **Key Principles:**
 - ❌ No HWID Locking
@@ -42,14 +42,14 @@ CryptexX v2.1 is a dual-layer encryption utility for payloads, optimized for red
 ```bash
 $ python3 main.py
 
-CryptexX v2.1 - Stateless Payload Encrypter
+CryptexX - Stateless Payload Encrypter
 ===========================================
 
 Enter payload file path: loader.bin
 Enter encryption password: *********
 Confirm password: *********
 
-[+] CryptexX v2.1 encryption successful!
+[+] CryptexX encryption successful!
     Salt: <hex>
     IV: <hex>
     XOR Key: <hex>
