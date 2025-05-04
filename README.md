@@ -1,112 +1,92 @@
-# 🚀 CryptexX v2.1 — Stateless ATP Payload Encrypter
+# CryptexX v2.1
 
-> **Built for adversarial automation. No locks. No limits. No barriers.**
+## Stateless Dual-Layer Payload Encryption Tool
 
----
+CryptexX is a lightweight, powerful encryption tool designed for autonomous deployment pipelines. It provides robust security through dual-layer encryption while remaining completely stateless and free of environmental constraints.
 
-## 🧬 Purpose
+## Features
 
-CryptexX v2.1 is a dual-layer encryption utility for payloads, optimized for red team deployment, autonomous dropper chains, and malware-as-a-service (MaaS) systems.
+- **Dual-Layer Encryption**: Combines AES-256-CBC and XOR for enhanced security
+- **Stateless Operation**: Works on any system without hardware or time validation
+- **Compression**: Uses zlib to reduce payload size before encryption
+- **Variable Padding**: Implements secure random padding instead of standard PKCS7
+- **Self-Contained**: Produces a single encrypted file with all necessary components
+- **Secure Key Derivation**: Employs PBKDF2-HMAC-SHA256 with 200,000 iterations
 
-**Key Principles:**
-- ❌ No HWID Locking
-- ❌ No Loader Binding
-- ❌ No Time Constraints
-- ✅ Fully Stateless
-- ✅ AES + XOR Obfuscation
-- ✅ Deployment-Ready `.enc` Payloads
+## How It Works
 
----
+CryptexX follows a streamlined encryption process:
 
-## 🔐 Encryption Stack
+1. **Input Processing**:
+   - Reads the target payload file
+   - Compresses the data using zlib
 
-1. **AES-256-CBC**
-    - Derived from PBKDF2-HMAC-SHA256 (200k iterations)
-    - Unique Salt + IV per encryption
+2. **Encryption**:
+   - Generates random salt and initialization vector (IV)
+   - Derives encryption key using PBKDF2 with your password
+   - Applies variable padding with random bytes
+   - Performs first-layer encryption with AES-256-CBC
+   - Generates random XOR key
+   - Performs second-layer encryption with XOR
 
-2. **XOR Layer**
-    - Random 256-bit stream mask
-    - Second-layer entropy against static scans
+3. **Output Generation**:
+   - Creates a single `.enc` file with the following structure:
+     - Magic Header (4 bytes)
+     - Salt (16 bytes)
+     - IV (16 bytes)
+     - XOR Key (32 bytes)
+     - Encrypted Payload
 
-3. **Variable Padding**
-    - Random byte noise + length byte
-    - Prevents PKCS7 fingerprinting
-
-4. **Compression**
-    - Zlib pre-encryption compression to minimize IOCs
-
----
-
-## 🛠️ Usage
+## Usage
 
 ```bash
-$ python3 cryptexx_offensive.py
+python cryptexx.py
+```
 
+Then follow the interactive prompts:
+1. Enter the path to the file you want to encrypt
+2. Provide an encryption password (and confirm it)
+
+The tool will generate an encrypted `.enc` file in the same directory.
+
+## Example Output
+
+```
+=============================================
 CryptexX v2.1 - Stateless Payload Encrypter
-===========================================
+=============================================
 
-Enter payload file path: loader.bin
-Enter encryption password: *********
-Confirm password: *********
+Enter payload file path: /path/to/payload.bin
 
 [+] CryptexX v2.1 encryption successful!
-    Salt: <hex>
-    IV: <hex>
-    XOR Key: <hex>
-    Compressed: 124672 → 64310 bytes
-    Final size: 64466 bytes
-    Output: loader.bin.enc
+    Magic: 0xC0DEDEAD
+    Salt: 8f7d6a3c2b1e5f4a9d8c7b6a5f4e3d2c
+    IV: 1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p
+    XOR Key: a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6
+    Compressed: 15240 → 5280 bytes
+    Final size: 5348 bytes
+    Output: /path/to/payload.bin.enc
 
 [+] Stateless payload ready for deployment.
+
+[+] Operation complete.
 ```
 
----
+## Security Notes
 
-## ✅ Output Format
+- The encryption password is never stored in the file
+- Sensitive data is securely wiped from memory after use
+- No hardware identifiers or time-based restrictions are included
+- The tool is designed for elastic delivery via indirect vectors
 
-| Section        | Description                | Size    |
-|----------------|----------------------------|---------|
-| Magic Header   | Constant (0xC0DEDEAD)       | 4 bytes |
-| Salt           | PBKDF2 Salt                | 16 bytes|
-| IV             | AES IV                     | 16 bytes|
-| XOR Key        | Random XOR stream          | 32 bytes|
-| Payload        | AES + XOR encrypted binary | N bytes |
+## Requirements
 
----
+- Python 3.6+
+- PyCryptodome library
 
-## 🧼 OPSEC Features
-
-- RAM-wiped buffers post-encryption
-- Stateless — decrypts anywhere
-- Compatible with: `GhostInject`, `donut`, `Crypter`, `macro_dropper`
-
----
-
-## 💥 Offensive Advantage
-
-| Feature               | Status     |
-|-----------------------|------------|
-| HWID Lock             | ❌ Removed |
-| Loader Hash Binding   | ❌ Removed |
-| Time Window Restriction | ❌ Removed |
-| AES-256 + XOR         | ✅ Enabled |
-| Compression + Padding | ✅ Enabled |
-| Secure RAM Wipe       | ✅ Enabled |
-
----
-
-## 📎 Recommended Chain
+## Installation
 
 ```bash
-CryptexX_Offensive → GhostStubBuilder → GhostInject.exe → dropper.py → payload.pdf
+# Install dependencies
+pip install pycryptodome
 ```
-
-**GhostInject.exe** loads `.enc` in memory → decrypts → injects into `explorer.exe`
-
----
-
-## 🧬 Final Thought
-
-> Designed for **maximum execution, minimal forensics, and unlimited deployment flexibility**.
-
-**You control the payload. Let nothing else decide where it runs.**
